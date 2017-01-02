@@ -13,7 +13,7 @@ module.exports = (args, callback, root) => {
 
     const childEnv = Object.assign({}, process.env);
     delete childEnv.NODE_ENV;
-    const cli = ChildProcess.spawn('node', [].concat(internals.labPath, args), { env: childEnv, cwd : root || '.' });
+    const cli = ChildProcess.fork(internals.labPath, args, { env: childEnv, cwd: (root || '.'), stdio: ['pipe', 'pipe', 'pipe', 'ipc'] });
     let output = '';
     let errorOutput = '';
     let combinedOutput = '';
@@ -28,6 +28,12 @@ module.exports = (args, callback, root) => {
 
         errorOutput += data;
         combinedOutput += data;
+    });
+
+    cli.on('error', (err) => {
+
+        errorOutput += err;
+        combinedOutput += err;
     });
 
     cli.once('close', (code, signal) => {
