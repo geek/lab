@@ -35,6 +35,7 @@ describe('CLI', () => {
             if (error) {
                 done(error);
             }
+
             expect(result.errorOutput).to.equal('');
             expect(result.code).to.equal(0);
             expect(result.output).to.contain('2 tests complete');
@@ -452,7 +453,7 @@ describe('CLI', () => {
             expect(result.errorOutput).to.equal('');
             expect(result.code).to.equal(1);
             expect(result.output).to.contain('2 tests complete');
-            expect(result.output).to.contain('Coverage: 0.00%');
+            expect(result.output).to.contain('Coverage:');
             done();
         });
     });

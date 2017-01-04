@@ -2,26 +2,39 @@
 
 'use strict';
 
-if (process.env.ROOT_SPAWN) {
-    require('../test_runner/cli').run();
-    return;
-}
+// Load modules
 
 const Cpr = require('cpr');
 const Rimraf = require('rimraf');
 
-Cpr('./lib', './test_runner', { deleteFirst: true, confirm: true }, (err) => {
 
-    if (err) {
-        console.error(err);
-        process.exit(1);
+// Declare internals
+
+const internals = {};
+
+
+internals.main = function () {
+
+    if (process.env.ROOT_SPAWN) {
+        require('../test_runner/cli').run();
+        return;
     }
 
-    process.env.ROOT_SPAWN = true;
-    require('../test_runner/cli').run();
-});
+    Cpr('./lib', './test_runner', { deleteFirst: true, confirm: true }, (err) => {
 
-process.on('exit', (code) => {
+        if (err) {
+            console.error(err);
+            process.exit(1);
+        }
 
-    Rimraf.sync('./test_runner');
-});
+        process.env.ROOT_SPAWN = true;
+        require('../test_runner/cli').run();
+    });
+
+    process.on('exit', (code) => {
+
+        Rimraf.sync('./test_runner');
+    });
+};
+
+internals.main();
