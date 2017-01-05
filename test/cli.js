@@ -1055,4 +1055,14 @@ describe('CLI', () => {
             done();
         });
     });
+
+    it('fails with more than one .only test in a block', (done) => {
+
+        RunCli(['test/cli_many_only/manyOnly.js', '-c'], (error, result) => {
+
+            expect(error).to.not.exist();
+            expect(result.code).to.equal(1);
+            done();
+        });
+    });
 });
