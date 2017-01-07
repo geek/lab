@@ -24,7 +24,7 @@ internals.main = function () {
 
         if (err) {
             console.error(err);
-            process.exit(1);
+            return process.exit(1);
         }
 
         process.env.ROOT_SPAWN = true;
